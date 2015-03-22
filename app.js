@@ -45,12 +45,20 @@ app.get('/users',function(req,res){
 });
 
 app.post('/users',function(req,res){
-  new user({
-        email:req.body.email
-    }).save(function(err,doc){
-        if(err) res.json(err);
-        else res.send('successfully inserted');
-    });
+  console.log(req.body.email);
+  
+  user.find({email:req.body.email},function(err,users){
+    console.log(users);
+
+    if(users.length==0){
+        new user({
+            email:req.body.email
+        }).save(function(err,doc){
+            if(err) res.json(err);
+            else res.send(req.body.email);
+        });
+    }
+  });
 });
 
 
