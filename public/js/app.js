@@ -23,20 +23,31 @@ app.controller('admin',['$scope','$http',function($scope,$http){
 		
 }]);
 
-
-app.directive('employeeList',function($http){
-	return{
-		restrict:'AE',
-		link:function($scope,$elem,$attr){
-			$scope.deleteEmployee=function(){
-				var deleteUser=$elem.find('.email').html();
-				$http.post('/deleteUser',deleteUser)
+app.factory('deleteService', ['$http', function ($http) {
+    return {
+        deleteUserDetails: function (email) {
+            return $http.post('/deleteUser',email)
 				.success(function(result){
-
+					return result;
 				}).
 				error(function(){
 
 				});
+        }
+    }
+}]);
+
+app.directive('employeeList',['deleteService', function(service){
+	return{
+		restrict:'AE',
+		link:function($scope,$elem,$attr,$http){
+			$scope.deleteEmployee=function(){
+				var User={'email':$elem.find('.email').html()};
+				service.deleteUserDetails(User)
+						.then(function(result){
+							console.log(result.data);
+						});
+				
 			}
 		},
 		templateUrl:'/templates/employeeList.html',
@@ -46,4 +57,4 @@ app.directive('employeeList',function($http){
 			deleteEmployee:'&'
 		}
 	}
-});
+}]);
