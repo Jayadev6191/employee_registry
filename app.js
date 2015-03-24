@@ -61,6 +61,12 @@ app.post('/users',function(req,res){
   });
 });
 
+app.post('/deleteUser',function(req,res){
+  console.log(req.body.email);
+  
+  
+});
+
 
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

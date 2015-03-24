@@ -20,20 +20,23 @@ app.controller('admin',['$scope','$http',function($scope,$http){
 			});		
 		}
 
-		var self=$(this);
-		$scope.deleteEmployee=function(self){
-			alert(this);
-		}
+		
 }]);
 
 
-app.directive('employeeList',function(){
+app.directive('employeeList',function($http){
 	return{
 		restrict:'AE',
 		link:function($scope,$elem,$attr){
-			console.log($('this'));
 			$scope.deleteEmployee=function(){
-					console.log($(this).parents('li').find('.email').html());
+				var deleteUser=$elem.find('.email').html();
+				$http.post('/deleteUser',deleteUser)
+				.success(function(result){
+
+				}).
+				error(function(){
+
+				});
 			}
 		},
 		templateUrl:'/templates/employeeList.html',
