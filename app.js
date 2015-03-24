@@ -64,10 +64,13 @@ app.post('/users',function(req,res){
 
 
 app.post('/deleteUser',function(req,res){
-  console.log(req.body.email);
-  user.remove({email:req.body.email}).then(function(){
-    res.send(req.body.email+"deleted"); 
+  
+  var promise = user.find({email:req.body.email}).remove().exec();
+  promise.then(function(res){
+    console.log(req.body.email+" deleted");
   });
+
+  
 
 });
 
