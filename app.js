@@ -38,10 +38,10 @@ var user = mongoose.model('users',Schema);
 
 
 app.get('/users',function(req,res){
-      user.find({},function(err,users){
-        console.log(users);
-        res.send(users);
-      });
+    user.find({},function(err,users){
+      console.log(users);
+      res.send(users);
+    });
 });
 
 app.post('/users',function(req,res){
@@ -55,7 +55,9 @@ app.post('/users',function(req,res){
             email:req.body.email
         }).save(function(err,doc){
             if(err) res.json(err);
-            else res.send(req.body.email);
+            else user.find({},function(err,users){
+              res.send(users);
+            });
         });
     }
   });
@@ -64,14 +66,13 @@ app.post('/users',function(req,res){
 
 
 app.post('/deleteUser',function(req,res){
-  
   var promise = user.find({email:req.body.email}).remove().exec();
-  promise.then(function(res){
+  promise.then(function(result){
     console.log(req.body.email+" deleted");
+    user.find({},function(err,users){
+        res.send(users);
+    });
   });
-
-  
-
 });
 
 
